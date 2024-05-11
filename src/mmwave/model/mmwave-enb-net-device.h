@@ -49,7 +49,7 @@
 #include <ns3/oran-interface.h>
 #include "ns3/mmwave-bearer-stats-calculator.h"
 #include <ns3/mmwave-phy-trace.h>
-#include "sdlcppK0hDHl8U28X3.h"
+#include "sdlcpp.h"
 
 
 namespace ns3 {
