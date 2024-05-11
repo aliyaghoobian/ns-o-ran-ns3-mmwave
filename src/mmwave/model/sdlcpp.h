@@ -18,6 +18,9 @@ using Data = std::string;
 using DataMap = std::map<Key, Data>;
 using Keys = std::set<Key>;
 
+namespace ns3 {
+
+namespace mmwave {
 
 class XappSDL{
 private:
@@ -29,5 +32,9 @@ public:
 	// void get_data(shareddatalayer::SyncStorage *);
 	bool set_data(shareddatalayer::SyncStorage *);
 };
+
+}
+
+}
 
 #endif /* SDLCPP_H */

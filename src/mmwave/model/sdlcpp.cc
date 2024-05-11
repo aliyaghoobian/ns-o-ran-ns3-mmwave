@@ -1,6 +1,10 @@
 #include "sdlcpp.h"
 
+namespace ns3 {
 
+// NS_LOG_COMPONENT_DEFINE ("MmWavePhy");
+
+namespace mmwave {
 bool XappSDL::set_data(shareddatalayer::SyncStorage *, std::string key, std::string value){
 	try{
         DataMap dmap;
@@ -32,3 +36,7 @@ bool XappSDL::set_data(shareddatalayer::SyncStorage *, std::string key, std::str
 // 	}
 
 // }
+
+}
+
+}
