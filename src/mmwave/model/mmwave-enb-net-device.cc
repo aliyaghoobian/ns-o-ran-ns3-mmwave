@@ -77,7 +77,7 @@ NS_OBJECT_ENSURE_REGISTERED (MmWaveEnbNetDevice);
 * \param pdu request message
 */
 
-bool XappSDL::set_data(shareddatalayer::SyncStorage *, std::string key, std::string value){
+bool XappSDL::set_data(std::string key, std::string value){
   try{
     DataMap dmap;
     Key k = key;

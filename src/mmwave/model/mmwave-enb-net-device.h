@@ -71,7 +71,7 @@ private:
 public:
 	XappSDL(std::string ns) { sdl_namespace=ns; }
 	// void get_data(shareddatalayer::SyncStorage *);
-	bool set_data(shareddatalayer::SyncStorage *);
+	bool set_data(std::string key, std::string value);
 };
 
 namespace ns3 {
@@ -190,8 +190,8 @@ private:
   std::string m_cuCpFileName;
   std::string m_duFileName;
 
-  std::string nmspace = "ns-o-ran";
-  XappSDL xappsdl(nmspace);
+  std::string sdl_nmspace = "ns-o-ran";
+  XappSDL xappsdl(sdl_nmspace);
 
 
 };
