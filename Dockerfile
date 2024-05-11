@@ -45,6 +45,7 @@ RUN apt-get install -y cpputest
 RUN apt-get remove -y libboost-all-dev
 RUN apt-get install -y  libboost-all-dev
 RUN apt-get install -y libhiredis-dev
+RUN sudo apt install doxygen
 
 RUN git clone https://gerrit.o-ran-sc.org/r/ric-plt/sdl
 RUN cd sdl && \

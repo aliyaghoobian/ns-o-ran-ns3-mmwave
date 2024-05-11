@@ -49,6 +49,7 @@
 #include <ns3/oran-interface.h>
 #include "ns3/mmwave-bearer-stats-calculator.h"
 #include <ns3/mmwave-phy-trace.h>
+#include "sdl.h"
 
 
 namespace ns3 {
@@ -166,6 +167,10 @@ private:
   std::string m_cuUpFileName;
   std::string m_cuCpFileName;
   std::string m_duFileName;
+
+  std::string nmspace = "ns-o-ran";
+  XappSDL xappsdl(nmspace);
+
 
 };
 }
