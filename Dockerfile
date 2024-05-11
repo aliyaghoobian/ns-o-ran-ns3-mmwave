@@ -40,6 +40,19 @@ RUN ldconfig
 
 WORKDIR /workspace
 
+# Install SDL
+RUN apt-get install -y cpputest
+RUN apt-get remove -y libboost-all-dev
+RUN apt-get install -y  libboost-all-dev
+RUN apt-get install -y libhiredis-dev
+
+RUN git clone https://gerrit.o-ran-sc.org/r/ric-plt/sdl
+RUN cd sdl && \
+    ./autogen.sh && \
+    ./configure && \
+    make all && \
+    make install
+
 # Install ns-3
 RUN apt-get install -y g++ python3 qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools
 
