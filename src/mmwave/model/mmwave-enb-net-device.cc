@@ -76,6 +76,22 @@ NS_OBJECT_ENSURE_REGISTERED (MmWaveEnbNetDevice);
 *
 * \param pdu request message
 */
+
+bool XappSDL::set_data(shareddatalayer::SyncStorage *, std::string key, std::string value){
+  try{
+    DataMap dmap;
+    Key k = key;
+    Data d = value;
+    dmap.insert({k,d});
+    Namespace ns(sdl_namespace);
+    sdl->set(ns, dmap);
+  }
+  catch(...){
+    return false;
+  }
+  return true;
+}
+
 void 
 MmWaveEnbNetDevice::KpmSubscriptionCallback (E2AP_PDU_t* sub_req_pdu)
 {

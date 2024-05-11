@@ -49,8 +49,30 @@
 #include <ns3/oran-interface.h>
 #include "ns3/mmwave-bearer-stats-calculator.h"
 #include <ns3/mmwave-phy-trace.h>
-#include "ns3/sdlcpp.h"
+#include <string>
+#include <memory>
+#include <set>
+#include <sdl/syncstorage.hpp>
 
+
+using namespace std;
+using Namespace = std::string;
+using Key = std::string;
+using Data = std::string;
+using DataMap = std::map<Key, Data>;
+using Keys = std::set<Key>;
+
+
+class XappSDL{
+private:
+	std::string sdl_namespace;
+	std::unique_ptr<shareddatalayer::SyncStorage> sdl(shareddatalayer::SyncStorage::create());
+
+public:
+	XappSDL(std::string ns) { sdl_namespace=ns; }
+	// void get_data(shareddatalayer::SyncStorage *);
+	bool set_data(shareddatalayer::SyncStorage *);
+};
 
 namespace ns3 {
 /* Add forward declarations here */
