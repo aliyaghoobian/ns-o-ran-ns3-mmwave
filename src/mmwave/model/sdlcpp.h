@@ -1,7 +1,7 @@
 // Developed by Ali Yaghoubian
 
-#ifndef SDL_H
-#define SDL_H
+#ifndef SDLCPP_H
+#define SDLCPP_H
 
 #include <iostream>
 #include <string>
@@ -10,7 +10,6 @@
 #include <map>
 #include <set>
 #include <sdl/syncstorage.hpp>
-#include <mdclog/mdclog.h>
 
 using namespace std;
 using Namespace = std::string;
@@ -31,4 +30,4 @@ public:
 	bool set_data(shareddatalayer::SyncStorage *);
 };
 
-#endif /* SDL_H */
+#endif /* SDLCPP_H */

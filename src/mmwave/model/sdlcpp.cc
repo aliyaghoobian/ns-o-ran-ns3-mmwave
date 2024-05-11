@@ -1,4 +1,4 @@
-#include "sdl.h"
+#include "sdlcpp.h"
 
 
 bool XappSDL::set_data(shareddatalayer::SyncStorage *, std::string key, std::string value){
@@ -31,5 +31,4 @@ bool XappSDL::set_data(shareddatalayer::SyncStorage *, std::string key, std::str
 // 		printf("KEYS and Values %s = %s\n",(*si).c_str(), val);
 // 	}
 
-// 	mdclog_write(MDCLOG_INFO,  "IN SDL Get Data", __FILE__, __LINE__);
 // }
