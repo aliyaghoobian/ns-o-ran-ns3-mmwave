@@ -5,7 +5,11 @@
 
 # def configure(conf):
 #     conf.check_nonfatal(header_name='stdint.h', define_name='HAVE_STDINT_H')
-
+def configure(conf):
+    conf.env.append_value('CXXFLAGS', '-I/usr/local/include/sdl')
+    conf.env.append_value("LINKFLAGS", ["-L/usr/local/lib"])
+    conf.env.append_value("LIB", ["sdl"])
+    
 def build(bld):
     module = bld.create_ns3_module('mmwave', ['core','network', 'spectrum', 'virtual-net-device','point-to-point','applications','internet', 'lte', 'propagation', 'oran-interface'])
     module.source = [

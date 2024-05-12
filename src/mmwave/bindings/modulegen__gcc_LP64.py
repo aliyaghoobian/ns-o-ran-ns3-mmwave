@@ -2180,7 +2180,7 @@ def register_types_ns3_mmwave(module):
     ## mmwave-interference.h (module 'mmwave'): ns3::mmwave::mmWaveInterference [class]
     module.add_class('mmWaveInterference', parent=root_module['ns3::Object'])
     ## mmwave-spectrum-signal-parameters.h (module 'mmwave'): ns3::mmwave::mmwaveSpectrumSignalParameters [struct]
-    module.add_class('mmwaveSpectrumSignalParameters', parent=root_module['ns3::SpectrumSignalParameters'])
+    module.add_class('mmwaveSpectrumzSignalParameters', parent=root_module['ns3::SpectrumSignalParameters'])
     ## mmwave-no-op-component-carrier-manager.h (module 'mmwave'): ns3::mmwave::MmWaveBaRrComponentCarrierManager [class]
     module.add_class('MmWaveBaRrComponentCarrierManager', parent=root_module['ns3::mmwave::MmWaveNoOpComponentCarrierManager'])
     ## mmwave-control-messages.h (module 'mmwave'): ns3::mmwave::MmWaveBsrMessage [class]

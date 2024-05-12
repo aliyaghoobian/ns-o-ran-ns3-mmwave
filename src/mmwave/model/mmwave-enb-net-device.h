@@ -58,21 +58,11 @@
 using namespace std;
 using Namespace = std::string;
 using Key = std::string;
-using Data = std::string;
+using Data = std::vector<uint8_t>;
 using DataMap = std::map<Key, Data>;
 using Keys = std::set<Key>;
 
 
-class XappSDL{
-private:
-	std::string sdl_namespace;
-	std::unique_ptr<shareddatalayer::SyncStorage> sdl(shareddatalayer::SyncStorage::create());
-
-public:
-	XappSDL(std::string ns) { sdl_namespace=ns; }
-	// void get_data(shareddatalayer::SyncStorage *);
-	bool set_data(std::string key, std::string value);
-};
 
 namespace ns3 {
 /* Add forward declarations here */
@@ -189,11 +179,7 @@ private:
   std::string m_cuUpFileName;
   std::string m_cuCpFileName;
   std::string m_duFileName;
-
-  std::string sdl_nmspace = "ns-o-ran";
-  XappSDL xappsdl(sdl_nmspace);
-
-
+  
 };
 }
 }

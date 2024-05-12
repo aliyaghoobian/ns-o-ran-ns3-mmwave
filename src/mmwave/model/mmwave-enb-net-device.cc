@@ -60,6 +60,8 @@
 #include <ns3/mmwave-indication-message-helper.h>
 
 #include "encode_e2apv1.hpp"
+
+
 namespace ns3 {
 
 NS_LOG_COMPONENT_DEFINE ("MmWaveEnbNetDevice");
@@ -77,20 +79,6 @@ NS_OBJECT_ENSURE_REGISTERED (MmWaveEnbNetDevice);
 * \param pdu request message
 */
 
-bool XappSDL::set_data(std::string key, std::string value){
-  try{
-    DataMap dmap;
-    Key k = key;
-    Data d = value;
-    dmap.insert({k,d});
-    Namespace ns(sdl_namespace);
-    sdl->set(ns, dmap);
-  }
-  catch(...){
-    return false;
-  }
-  return true;
-}
 
 void 
 MmWaveEnbNetDevice::KpmSubscriptionCallback (E2AP_PDU_t* sub_req_pdu)
@@ -409,10 +397,14 @@ MmWaveEnbNetDevice::UpdateConfig (void)
               NS_LOG_DEBUG("E2sim start in cell " << m_cellId 
                 << " force CSV logging " << m_forceE2FileLogging);              
 
-              if(!m_forceE2FileLogging) {
+              // !m_forceE2FileLogging
+              if(true) {
                 Simulator::Schedule (MicroSeconds (0), &E2Termination::Start, m_e2term);
               }
               else {
+
+
+
                 m_cuUpFileName = "cu-up-cell-" + std::to_string(m_cellId);
                 // std::ofstream csv {};
                 // csv.open (m_cuUpFileName.c_str ());
@@ -701,7 +693,24 @@ MmWaveEnbNetDevice::BuildRicIndicationMessageCuUp(std::string plmId)
                                  "," + "," + uePms + "\n";
 
 
-          xappsdl.set_data(m_cuUpFileName, to_print)
+
+
+          std::string sdl_nmspace = "ns-o-ran";
+          std::unique_ptr<shareddatalayer::SyncStorage> sdl(shareddatalayer::SyncStorage::create());
+          try{
+            DataMap dmap;
+            Key k = m_cuUpFileName + "," + ueImsiComplete;
+            Data d;
+            d.assign(to_print.begin(), to_print.end());
+            dmap.insert({k,d});
+            Namespace ns(sdl_nmspace);
+            sdl->set(ns, dmap);
+          }
+        catch(...){
+          NS_FATAL_ERROR ("Can't write in sdl.");
+        }
+
+          // xappsdl.set_data(m_cuUpFileName, to_print);
 
           // csv << to_print;
         }
@@ -868,7 +877,21 @@ MmWaveEnbNetDevice::BuildRicIndicationMessageCuCp(std::string plmId)
 
           NS_LOG_DEBUG (to_print);
 
-          xappsdl.set_data(m_cuCpFileName, to_print)
+          std::string sdl_nmspace = "ns-o-ran";
+          std::unique_ptr<shareddatalayer::SyncStorage> sdl(shareddatalayer::SyncStorage::create());
+          try{
+            DataMap dmap;
+            Key k = m_cuCpFileName + "," + ueImsiComplete;
+            Data d;
+            d.assign(to_print.begin(), to_print.end());
+            dmap.insert({k,d});
+            Namespace ns(sdl_nmspace);
+            sdl->set(ns, dmap);
+          }
+        catch(...){
+          NS_FATAL_ERROR ("Can't write in sdl.");
+        }
+          // xappsdl.set_data(m_cuCpFileName, to_print);
           // csv << to_print;
         }
       // csv.close ();
@@ -1253,8 +1276,21 @@ MmWaveEnbNetDevice::BuildRicIndicationMessageDu(std::string plmId, uint16_t nrCe
       + to_print_cell +  ","
       + uePms + "\n";
 
-
-      xappsdl.set_data(m_duFileName, to_print)
+      std::string sdl_nmspace = "ns-o-ran";
+      std::unique_ptr<shareddatalayer::SyncStorage> sdl(shareddatalayer::SyncStorage::create());
+      try{
+        DataMap dmap;
+        Key k = m_duFileName + "," + ueImsiComplete;
+        Data d;
+        d.assign(to_print.begin(), to_print.end());
+        dmap.insert({k,d});
+        Namespace ns(sdl_nmspace);
+        sdl->set(ns, dmap);
+      }
+    catch(...){
+      NS_FATAL_ERROR ("Can't write in sdl.");
+    }
+      // xappsdl.set_data(m_duFileName, to_print);
 
       // csv << to_print;
     }

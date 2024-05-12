@@ -41,11 +41,8 @@ RUN ldconfig
 WORKDIR /workspace
 
 # Install SDL
-RUN apt-get install -y cpputest
-RUN apt-get remove -y libboost-all-dev
-RUN apt-get install -y  libboost-all-dev
-RUN apt-get install -y libhiredis-dev
-RUN sudo apt install -y doxygen
+RUN apt-get install -y cpputest libboost-all-dev libboost-all-dev libhiredis-dev doxygen
+
 
 RUN git clone https://gerrit.o-ran-sc.org/r/ric-plt/sdl
 RUN cd sdl && \
@@ -58,6 +55,7 @@ RUN cd sdl && \
 RUN apt-get install -y g++ python3 qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools
 
 RUN git clone -b dev https://github.com/aliyaghoobian/ns-o-ran-ns3-mmwave.git /workspace/ns3-mmwave-oran
+# COPY . /workspace/ns3-mmwave-oran
 RUN git clone -b master https://github.com/o-ran-sc/sim-ns3-o-ran-e2 /workspace/ns3-mmwave-oran/contrib/oran-interface
 
 WORKDIR /workspace/ns3-mmwave-oran

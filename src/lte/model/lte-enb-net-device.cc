@@ -629,8 +629,8 @@ LteEnbNetDevice::UpdateConfig (void)
       {
       	NS_LOG_DEBUG("E2sim start in cell " << m_cellId 
           << " force CSV logging " << m_forceE2FileLogging);
-
-        if (!m_forceE2FileLogging)
+        // !m_forceE2FileLogging
+        if (true)
           {
             Simulator::Schedule (MicroSeconds (0), &E2Termination::Start, m_e2term);
           }
@@ -841,12 +841,12 @@ LteEnbNetDevice::BuildRicIndicationMessageCuUp(std::string plmId)
   NS_LOG_DEBUG(Simulator::Now().GetSeconds() << " " << std::to_string(m_cellId) << " cell volume " << cellDlTxVolume);
 
   if (m_forceE2FileLogging) {
-    std::ofstream csv {};
-    csv.open (m_cuUpFileName.c_str (),  std::ios_base::app);
-    if (!csv.is_open ())
-    {
-      NS_FATAL_ERROR ("Can't open file " << m_cuUpFileName.c_str ());
-    }
+    // std::ofstream csv {};
+    // csv.open (m_cuUpFileName.c_str (),  std::ios_base::app);
+    // if (!csv.is_open ())
+    // {
+    //   NS_FATAL_ERROR ("Can't open file " << m_cuUpFileName.c_str ());
+    // }
 
     uint64_t timestamp = m_startTime + (uint64_t) Simulator::Now().GetMilliSeconds ();
 
@@ -870,10 +870,23 @@ LteEnbNetDevice::BuildRicIndicationMessageCuUp(std::string plmId)
         std::to_string(0) + "," +
         std::to_string(cellDlTxVolume) + "," +
         uePms + ",,\n";
-
-      csv << to_print;
+      std::string sdl_nmspace = "ns-o-ran";
+      std::unique_ptr<shareddatalayer::SyncStorage> sdl(shareddatalayer::SyncStorage::create());
+      try{
+        DataMap dmap;
+        Key k = m_cuUpFileName + "," + ueImsiComplete;
+        Data d;
+        d.assign(to_print.begin(), to_print.end());
+        dmap.insert({k,d});
+        Namespace ns(sdl_nmspace);
+        sdl->set(ns, dmap);
+      }
+    catch(...){
+      NS_FATAL_ERROR ("Can't write in sdl.");
     }
-    csv.close();
+      // csv << to_print;
+    }
+    // csv.close();
     return nullptr;
     }
   else
@@ -916,12 +929,12 @@ LteEnbNetDevice::BuildRicIndicationMessageCuCp(std::string plmId)
     }
 
   if (m_forceE2FileLogging) {
-    std::ofstream csv {};
-    csv.open (m_cuCpFileName.c_str (),  std::ios_base::app);
-    if (!csv.is_open ())
-    {
-      NS_FATAL_ERROR ("Can't open file " << m_cuCpFileName.c_str ());
-    }
+    // std::ofstream csv {};
+    // csv.open (m_cuCpFileName.c_str (),  std::ios_base::app);
+    // if (!csv.is_open ())
+    // {
+    //   NS_FATAL_ERROR ("Can't open file " << m_cuCpFileName.c_str ());
+    // }
 
     NS_LOG_DEBUG ("m_cuCpFileName open " << m_cuCpFileName);
 
@@ -941,11 +954,24 @@ LteEnbNetDevice::BuildRicIndicationMessageCuCp(std::string plmId)
                              "\n";
 
       NS_LOG_DEBUG(to_print);
-
-      csv << to_print;
+      std::string sdl_nmspace = "ns-o-ran";
+      std::unique_ptr<shareddatalayer::SyncStorage> sdl(shareddatalayer::SyncStorage::create());
+      try{
+        DataMap dmap;
+        Key k = m_cuCpFileName + "," + ueImsiComplete;
+        Data d;
+        d.assign(to_print.begin(), to_print.end());
+        dmap.insert({k,d});
+        Namespace ns(sdl_nmspace);
+        sdl->set(ns, dmap);
+      }
+    catch(...){
+      NS_FATAL_ERROR ("Can't write in sdl.");
+    }
+      // csv << to_print;
     }
 
-    csv.close ();
+    // csv.close ();
     
     return nullptr;
     }
