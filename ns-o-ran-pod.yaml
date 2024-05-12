@@ -1,0 +1,22 @@
+apiVersion: v1 
+kind: Pod 
+metadata:
+    name: ns-3-pod 
+    namespace: ricplt
+spec:
+    containers:
+    - name: ns-3-pod
+      image: ali19y19/ns-o-ran:1.0.2
+      imagePullPolicy: IfNotPresent
+      command: ["sleep", "infinity"]
+      env:
+      - name: DBAAS_PORT_6379_TCP_PORT
+        value: "6379"
+      - name: DBAAS_NODE_COUNT
+        value: "1"
+      - name: DBAAS_SERVICE_PORT
+        value: "6379"
+      - name: DBAAS_SERVICE_HOST
+        value: "service-ricplt-dbaas-tcp.ricplt"
+      - name: DBAAS_PORT_6379_TCP_ADDR
+        value: "service-ricplt-dbaas-tcp.ricplt.svc.cluster.local"
