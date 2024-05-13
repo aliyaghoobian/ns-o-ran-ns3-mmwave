@@ -6,7 +6,7 @@ metadata:
 spec:
     containers:
     - name: ns-3-pod
-      image: ali19y19/ns-o-ran:1.1
+      image: ali19y19/ns-o-ran:1.3
       imagePullPolicy: IfNotPresent
       command: ["sleep", "infinity"]
       env:

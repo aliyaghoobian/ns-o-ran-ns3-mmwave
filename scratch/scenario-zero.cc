@@ -204,11 +204,11 @@ int
 main (int argc, char *argv[])
 {
   LogComponentEnableAll (LOG_PREFIX_ALL);
-  // LogComponentEnable ("RicControlMessage", LOG_LEVEL_ALL);
+  LogComponentEnable ("RicControlMessage", LOG_LEVEL_ALL);
   // LogComponentEnable ("Asn1Types", LOG_LEVEL_LOGIC);
   // LogComponentEnable ("E2Termination", LOG_LEVEL_LOGIC);
 
-  // LogComponentEnable ("LteEnbNetDevice", LOG_LEVEL_ALL);
+  LogComponentEnable ("LteEnbNetDevice", LOG_LEVEL_DEBUG);
   LogComponentEnable ("MmWaveEnbNetDevice", LOG_LEVEL_DEBUG);
 
   // The maximum X coordinate of the scenario

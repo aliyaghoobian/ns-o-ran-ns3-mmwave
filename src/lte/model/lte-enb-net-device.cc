@@ -189,7 +189,7 @@ LteEnbNetDevice::ControlMessageReceivedCallback (E2AP_PDU_t* sub_req_pdu)
      NS_LOG_INFO ("Imsi Decoded: " << imsi);
      NS_LOG_INFO ("Target Cell id " << targetCellId);
      m_rrc->TakeUeHoControl (imsi);
-     if (!m_forceE2FileLogging)
+     if (true)
        {
          Simulator::ScheduleWithContext (1, Seconds (0), &LteEnbRrc::PerformHandoverToTargetCell,
                                          m_rrc, imsi, targetCellId);
@@ -597,7 +597,7 @@ LteEnbNetDevice::DoInitialize (void)
 bool
 LteEnbNetDevice::Send (Ptr<Packet> packet, const Address& dest, uint16_t protocolNumber)
 {
-  NS_LOG_FUNCTION (this << packet << dest << protocolNumber);
+  // NS_LOG_FUNCTION (this << packet << dest << protocolNumber);
   NS_ABORT_MSG_IF (protocolNumber != Ipv4L3Protocol::PROT_NUMBER
                    && protocolNumber != Ipv6L3Protocol::PROT_NUMBER,
                    "unsupported protocol " << protocolNumber << ", only IPv4 and IPv6 are supported");
@@ -631,13 +631,14 @@ LteEnbNetDevice::UpdateConfig (void)
       	NS_LOG_DEBUG("E2sim start in cell " << m_cellId 
           << " force CSV logging " << m_forceE2FileLogging);
         // !m_forceE2FileLogging
-        if (true)
+        if (!m_forceE2FileLogging)
           {
             Simulator::Schedule (MicroSeconds (0), &E2Termination::Start, m_e2term);
-            Simulator::Schedule(MicroSeconds(500), &LteEnbNetDevice::BuildAndSendReportMessage, this, E2Termination::RicSubscriptionRequest_rval_s{});
+            // Simulator::Schedule(MicroSeconds(500), &LteEnbNetDevice::BuildAndSendReportMessage, this, E2Termination::RicSubscriptionRequest_rval_s{});
             // Simulator::Schedule(MicroSeconds(1000), &LteEnbNetDevice::ReadControlFile, this);
           }
         else { // give some time for the simulation to start, TODO check value
+          Simulator::Schedule (MicroSeconds (0), &E2Termination::Start, m_e2term);
           m_cuUpFileName = "cu-up-cell-" + std::to_string(m_cellId) + ".txt";
           std::ofstream csv {};
           csv.open (m_cuUpFileName.c_str ());
@@ -656,9 +657,10 @@ LteEnbNetDevice::UpdateConfig (void)
                  "sameCellSinr 3gpp encoded,L3 neigh Id (cellId),"
                  "sinr,3gpp encoded sinr (convertedSinr)\n";
           csv.close();
+
           Simulator::Schedule(MicroSeconds(500), &LteEnbNetDevice::BuildAndSendReportMessage, this, E2Termination::RicSubscriptionRequest_rval_s{});
 
-          Simulator::Schedule(MicroSeconds(1000), &LteEnbNetDevice::ReadControlFile, this);
+          // Simulator::Schedule(MicroSeconds(1000), &LteEnbNetDevice::ReadControlFile, this);
         }
       }
     }
