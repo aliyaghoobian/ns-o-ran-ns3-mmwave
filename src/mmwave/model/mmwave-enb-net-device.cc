@@ -60,8 +60,6 @@
 #include <ns3/mmwave-indication-message-helper.h>
 
 #include "encode_e2apv1.hpp"
-
-
 namespace ns3 {
 
 NS_LOG_COMPONENT_DEFINE ("MmWaveEnbNetDevice");
@@ -78,8 +76,6 @@ NS_OBJECT_ENSURE_REGISTERED (MmWaveEnbNetDevice);
 *
 * \param pdu request message
 */
-
-
 void 
 MmWaveEnbNetDevice::KpmSubscriptionCallback (E2AP_PDU_t* sub_req_pdu)
 {
@@ -395,81 +391,86 @@ MmWaveEnbNetDevice::UpdateConfig (void)
           if (m_e2term != 0)
             {
               NS_LOG_DEBUG("E2sim start in cell " << m_cellId 
-                << " force CSV logging " << m_forceE2FileLogging);              
-
-              // !m_forceE2FileLogging
-              if(true) {
-                Simulator::Schedule (MicroSeconds (0), &E2Termination::Start, m_e2term);
-              }
-              else {
+                << " force CSV logging " << m_forceE2FileLogging);
 
 
 
-                m_cuUpFileName = "cu-up-cell-" + std::to_string(m_cellId);
-                // std::ofstream csv {};
-                // csv.open (m_cuUpFileName.c_str ());
-                // csv << "timestamp,ueImsiComplete,DRB.PdcpSduDelayDl (cellAverageLatency),"
-                //        "m_pDCPBytesUL (0),"
-                //        "m_pDCPBytesDL (cellDlTxVolume),DRB.PdcpSduVolumeDl_Filter.UEID (txBytes),"
-                //        "Tot.PdcpSduNbrDl.UEID (txDlPackets),DRB.PdcpSduBitRateDl.UEID"
-                //        "(pdcpThroughput),"
-                //        "DRB.PdcpSduDelayDl.UEID (pdcpLatency),QosFlow.PdcpPduVolumeDL_Filter.UEID"
-                //        "(txPdcpPduBytesNrRlc),DRB.PdcpPduNbrDl.Qos.UEID (txPdcpPduNrRlc)\n";
-                // csv.close ();
+              Simulator::Schedule (MicroSeconds (0), &E2Termination::Start, m_e2term);
+              m_cuUpFileName = "cu-up-cell-" + std::to_string(m_cellId);
+              m_cuCpFileName = "cu-cp-cell-" + std::to_string(m_cellId);
+              m_duFileName = "du-cell-" + std::to_string(m_cellId);
+              Simulator::Schedule(MicroSeconds(500), &MmWaveEnbNetDevice::BuildAndSendReportMessage, this, E2Termination::RicSubscriptionRequest_rval_s{});
 
-                m_cuCpFileName = "cu-cp-cell-" + std::to_string(m_cellId);
-                // csv.open (m_cuCpFileName.c_str ());
-                // csv << "timestamp,ueImsiComplete,numActiveUes,DRB.EstabSucc.5QI.UEID (numDrb),"
-                //        "DRB.RelActNbr.5QI.UEID (0),L3 serving Id(m_cellId),UE (imsi),L3 serving SINR,"
-                //        "L3 serving SINR 3gpp,"
-                //        "L3 neigh Id 1 (cellId),L3 neigh SINR 1,L3 neigh SINR 3gpp 1 (convertedSinr),"
-                //        "L3 neigh Id 2 (cellId),L3 neigh SINR 2,L3 neigh SINR 3gpp 2 (convertedSinr),"
-                //        "L3 neigh Id 3 (cellId),L3 neigh SINR 3,L3 neigh SINR 3gpp 3 (convertedSinr),"
-                //        "L3 neigh Id 4 (cellId),L3 neigh SINR 4,L3 neigh SINR 3gpp 4 (convertedSinr),"
-                //        "L3 neigh Id 5 (cellId),L3 neigh SINR 5,L3 neigh SINR 3gpp 5 (convertedSinr),"
-                //        "L3 neigh Id 6 (cellId),L3 neigh SINR 6,L3 neigh SINR 3gpp 6 (convertedSinr),"
-                //        "L3 neigh Id 7 (cellId),L3 neigh SINR 7,L3 neigh SINR 3gpp 7 (convertedSinr),"
-                //        "L3 neigh Id 8 (cellId),L3 neigh SINR 8,L3 neigh SINR 3gpp 8 (convertedSinr)"
-                //        "\n";
-                // csv.close();
 
-                m_duFileName = "du-cell-" + std::to_string(m_cellId);
-                // csv.open (m_duFileName.c_str ());
+              // if(!m_forceE2FileLogging) {
+              //   Simulator::Schedule (MicroSeconds (0), &E2Termination::Start, m_e2term);
+              // }
+              // else {
+              //   m_cuUpFileName = "cu-up-cell-" + std::to_string(m_cellId) + ".txt";
+              //   std::ofstream csv {};
+              //   csv.open (m_cuUpFileName.c_str ());
+              //   csv << "timestamp,ueImsiComplete,DRB.PdcpSduDelayDl (cellAverageLatency),"
+              //          "m_pDCPBytesUL (0),"
+              //          "m_pDCPBytesDL (cellDlTxVolume),DRB.PdcpSduVolumeDl_Filter.UEID (txBytes),"
+              //          "Tot.PdcpSduNbrDl.UEID (txDlPackets),DRB.PdcpSduBitRateDl.UEID"
+              //          "(pdcpThroughput),"
+              //          "DRB.PdcpSduDelayDl.UEID (pdcpLatency),QosFlow.PdcpPduVolumeDL_Filter.UEID"
+              //          "(txPdcpPduBytesNrRlc),DRB.PdcpPduNbrDl.Qos.UEID (txPdcpPduNrRlc)\n";
+              //   csv.close ();
+
+              //   m_cuCpFileName = "cu-cp-cell-" + std::to_string(m_cellId) + ".txt";
+              //   csv.open (m_cuCpFileName.c_str ());
+              //   csv << "timestamp,ueImsiComplete,numActiveUes,DRB.EstabSucc.5QI.UEID (numDrb),"
+              //          "DRB.RelActNbr.5QI.UEID (0),L3 serving Id(m_cellId),UE (imsi),L3 serving SINR,"
+              //          "L3 serving SINR 3gpp,"
+              //          "L3 neigh Id 1 (cellId),L3 neigh SINR 1,L3 neigh SINR 3gpp 1 (convertedSinr),"
+              //          "L3 neigh Id 2 (cellId),L3 neigh SINR 2,L3 neigh SINR 3gpp 2 (convertedSinr),"
+              //          "L3 neigh Id 3 (cellId),L3 neigh SINR 3,L3 neigh SINR 3gpp 3 (convertedSinr),"
+              //          "L3 neigh Id 4 (cellId),L3 neigh SINR 4,L3 neigh SINR 3gpp 4 (convertedSinr),"
+              //          "L3 neigh Id 5 (cellId),L3 neigh SINR 5,L3 neigh SINR 3gpp 5 (convertedSinr),"
+              //          "L3 neigh Id 6 (cellId),L3 neigh SINR 6,L3 neigh SINR 3gpp 6 (convertedSinr),"
+              //          "L3 neigh Id 7 (cellId),L3 neigh SINR 7,L3 neigh SINR 3gpp 7 (convertedSinr),"
+              //          "L3 neigh Id 8 (cellId),L3 neigh SINR 8,L3 neigh SINR 3gpp 8 (convertedSinr)"
+              //          "\n";
+              //   csv.close();
+
+              //   m_duFileName = "du-cell-" + std::to_string(m_cellId) + ".txt";
+              //   csv.open (m_duFileName.c_str ());
                 
-                // std::string header_csv =
-                //     "timestamp,ueImsiComplete,plmId,nrCellId,dlAvailablePrbs,"
-                //     "ulAvailablePrbs,qci,dlPrbUsage,ulPrbUsage";
+              //   std::string header_csv =
+              //       "timestamp,ueImsiComplete,plmId,nrCellId,dlAvailablePrbs,"
+              //       "ulAvailablePrbs,qci,dlPrbUsage,ulPrbUsage";
 
-                // std::string cell_header =
-                //     "TB.TotNbrDl.1,TB.TotNbrDlInitial,TB.TotNbrDlInitial.Qpsk,"
-                //     "TB.TotNbrDlInitial.16Qam,"
-                //     "TB.TotNbrDlInitial.64Qam,RRU.PrbUsedDl,TB.ErrTotalNbrDl.1,"
-                //     "QosFlow.PdcpPduVolumeDL_Filter,CARR.PDSCHMCSDist.Bin1,"
-                //     "CARR.PDSCHMCSDist.Bin2,"
-                //     "CARR.PDSCHMCSDist.Bin3,CARR.PDSCHMCSDist.Bin4,CARR.PDSCHMCSDist.Bin5,"
-                //     "CARR.PDSCHMCSDist.Bin6,L1M.RS-SINR.Bin34,L1M.RS-SINR.Bin46, "
-                //     "L1M.RS-SINR.Bin58,"
-                //     "L1M.RS-SINR.Bin70,L1M.RS-SINR.Bin82,L1M.RS-SINR.Bin94,L1M.RS-SINR.Bin127,"
-                //     "DRB.BufferSize.Qos,DRB.MeanActiveUeDl";
+              //   std::string cell_header =
+              //       "TB.TotNbrDl.1,TB.TotNbrDlInitial,TB.TotNbrDlInitial.Qpsk,"
+              //       "TB.TotNbrDlInitial.16Qam,"
+              //       "TB.TotNbrDlInitial.64Qam,RRU.PrbUsedDl,TB.ErrTotalNbrDl.1,"
+              //       "QosFlow.PdcpPduVolumeDL_Filter,CARR.PDSCHMCSDist.Bin1,"
+              //       "CARR.PDSCHMCSDist.Bin2,"
+              //       "CARR.PDSCHMCSDist.Bin3,CARR.PDSCHMCSDist.Bin4,CARR.PDSCHMCSDist.Bin5,"
+              //       "CARR.PDSCHMCSDist.Bin6,L1M.RS-SINR.Bin34,L1M.RS-SINR.Bin46, "
+              //       "L1M.RS-SINR.Bin58,"
+              //       "L1M.RS-SINR.Bin70,L1M.RS-SINR.Bin82,L1M.RS-SINR.Bin94,L1M.RS-SINR.Bin127,"
+              //       "DRB.BufferSize.Qos,DRB.MeanActiveUeDl";
 
-                // std::string ue_header =
-                //     "TB.TotNbrDl.1.UEID,TB.TotNbrDlInitial.UEID,TB.TotNbrDlInitial.Qpsk.UEID,"
-                //     "TB.TotNbrDlInitial.16Qam.UEID,TB.TotNbrDlInitial.64Qam.UEID,"
-                //     "TB.ErrTotalNbrDl.1.UEID,"
-                //     "QosFlow.PdcpPduVolumeDL_Filter.UEID,RRU.PrbUsedDl.UEID,"
-                //     "CARR.PDSCHMCSDist.Bin1.UEID,"
-                //     "CARR.PDSCHMCSDist.Bin2.UEID,CARR.PDSCHMCSDist.Bin3.UEID,"
-                //     "CARR.PDSCHMCSDist.Bin4.UEID,"
-                //     "CARR.PDSCHMCSDist.Bin5.UEID,"
-                //     "CARR.PDSCHMCSDist.Bin6.UEID,L1M.RS-SINR.Bin34.UEID, L1M.RS-SINR.Bin46.UEID,"
-                //     "L1M.RS-SINR.Bin58.UEID,L1M.RS-SINR.Bin70.UEID,L1M.RS-SINR.Bin82.UEID,"
-                //     "L1M.RS-SINR.Bin94.UEID,L1M.RS-SINR.Bin127.UEID,DRB.BufferSize.Qos.UEID,"
-                //     "DRB.UEThpDl.UEID, DRB.UEThpDlPdcpBased.UEID";
+              //   std::string ue_header =
+              //       "TB.TotNbrDl.1.UEID,TB.TotNbrDlInitial.UEID,TB.TotNbrDlInitial.Qpsk.UEID,"
+              //       "TB.TotNbrDlInitial.16Qam.UEID,TB.TotNbrDlInitial.64Qam.UEID,"
+              //       "TB.ErrTotalNbrDl.1.UEID,"
+              //       "QosFlow.PdcpPduVolumeDL_Filter.UEID,RRU.PrbUsedDl.UEID,"
+              //       "CARR.PDSCHMCSDist.Bin1.UEID,"
+              //       "CARR.PDSCHMCSDist.Bin2.UEID,CARR.PDSCHMCSDist.Bin3.UEID,"
+              //       "CARR.PDSCHMCSDist.Bin4.UEID,"
+              //       "CARR.PDSCHMCSDist.Bin5.UEID,"
+              //       "CARR.PDSCHMCSDist.Bin6.UEID,L1M.RS-SINR.Bin34.UEID, L1M.RS-SINR.Bin46.UEID,"
+              //       "L1M.RS-SINR.Bin58.UEID,L1M.RS-SINR.Bin70.UEID,L1M.RS-SINR.Bin82.UEID,"
+              //       "L1M.RS-SINR.Bin94.UEID,L1M.RS-SINR.Bin127.UEID,DRB.BufferSize.Qos.UEID,"
+              //       "DRB.UEThpDl.UEID, DRB.UEThpDlPdcpBased.UEID";
 
-                // csv << header_csv + "," + cell_header + "," + ue_header + "\n";
-                // csv.close();
-                Simulator::Schedule(MicroSeconds(500), &MmWaveEnbNetDevice::BuildAndSendReportMessage, this, E2Termination::RicSubscriptionRequest_rval_s{});
-              }
+              //   csv << header_csv + "," + cell_header + "," + ue_header + "\n";
+              //   csv.close();
+              //   Simulator::Schedule(MicroSeconds(500), &MmWaveEnbNetDevice::BuildAndSendReportMessage, this, E2Termination::RicSubscriptionRequest_rval_s{});
+              // }
 
             }
           m_isConfigured = true;
@@ -693,24 +694,20 @@ MmWaveEnbNetDevice::BuildRicIndicationMessageCuUp(std::string plmId)
                                  "," + "," + uePms + "\n";
 
 
-
-
           std::string sdl_nmspace = "ns-o-ran";
           std::unique_ptr<shareddatalayer::SyncStorage> sdl(shareddatalayer::SyncStorage::create());
           try{
             DataMap dmap;
-            Key k = m_cuUpFileName + "," + ueImsiComplete;
+            Key k = m_cuUpFileName + "," + std::to_string (timestamp) + "," + ueImsiComplete;
             Data d;
             d.assign(to_print.begin(), to_print.end());
             dmap.insert({k,d});
             Namespace ns(sdl_nmspace);
             sdl->set(ns, dmap);
           }
-        catch(...){
-          NS_FATAL_ERROR ("Can't write in sdl.");
-        }
-
-          // xappsdl.set_data(m_cuUpFileName, to_print);
+          catch(...){
+            NS_FATAL_ERROR ("Can't write in sdl.");
+          }
 
           // csv << to_print;
         }
@@ -877,21 +874,23 @@ MmWaveEnbNetDevice::BuildRicIndicationMessageCuCp(std::string plmId)
 
           NS_LOG_DEBUG (to_print);
 
+
+
           std::string sdl_nmspace = "ns-o-ran";
           std::unique_ptr<shareddatalayer::SyncStorage> sdl(shareddatalayer::SyncStorage::create());
           try{
             DataMap dmap;
-            Key k = m_cuCpFileName + "," + ueImsiComplete;
+            Key k = m_cuCpFileName + "," + std::to_string (timestamp) + "," + ueImsiComplete;
             Data d;
             d.assign(to_print.begin(), to_print.end());
             dmap.insert({k,d});
             Namespace ns(sdl_nmspace);
             sdl->set(ns, dmap);
           }
-        catch(...){
-          NS_FATAL_ERROR ("Can't write in sdl.");
-        }
-          // xappsdl.set_data(m_cuCpFileName, to_print);
+          catch(...){
+            NS_FATAL_ERROR ("Can't write in sdl.");
+          }
+
           // csv << to_print;
         }
       // csv.close ();
@@ -1276,21 +1275,21 @@ MmWaveEnbNetDevice::BuildRicIndicationMessageDu(std::string plmId, uint16_t nrCe
       + to_print_cell +  ","
       + uePms + "\n";
 
+
       std::string sdl_nmspace = "ns-o-ran";
       std::unique_ptr<shareddatalayer::SyncStorage> sdl(shareddatalayer::SyncStorage::create());
       try{
         DataMap dmap;
-        Key k = m_duFileName + "," + ueImsiComplete;
+        Key k = m_duFileName + "," + std::to_string (timestamp) + "," + ueImsiComplete;
         Data d;
         d.assign(to_print.begin(), to_print.end());
         dmap.insert({k,d});
         Namespace ns(sdl_nmspace);
         sdl->set(ns, dmap);
       }
-    catch(...){
-      NS_FATAL_ERROR ("Can't write in sdl.");
-    }
-      // xappsdl.set_data(m_duFileName, to_print);
+      catch(...){
+        NS_FATAL_ERROR ("Can't write in sdl.");
+      }
 
       // csv << to_print;
     }

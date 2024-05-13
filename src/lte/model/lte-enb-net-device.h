@@ -34,18 +34,6 @@
 #include <map>
 #include <ns3/oran-interface.h>
 #include "ns3/mmwave-bearer-stats-calculator.h"
-#include <string>
-#include <memory>
-#include <set>
-#include <sdl/syncstorage.hpp>
-
-
-using namespace std;
-using Namespace = std::string;
-using Key = std::string;
-using Data = std::vector<uint8_t>;
-using DataMap = std::map<Key, Data>;
-using Keys = std::set<Key>;
 
 namespace ns3 {
 

@@ -169,7 +169,8 @@ void
 LteEnbNetDevice::ControlMessageReceivedCallback (E2AP_PDU_t* sub_req_pdu)
 {
   NS_LOG_DEBUG ("\n\nLteEnbNetDevice::ControlMessageReceivedCallback: Received RIC Control Message");
-  
+  NS_LOG_INFO ("\n\nLteEnbNetDevice::ControlMessageReceivedCallback: Received RIC Control Message");
+
   Ptr<RicControlMessage> controlMessage = Create<RicControlMessage> (sub_req_pdu);
   NS_LOG_INFO ("After RicControlMessage::RicControlMessage constructor");
   NS_LOG_INFO ("Request type " << controlMessage->m_requestType);
@@ -633,6 +634,8 @@ LteEnbNetDevice::UpdateConfig (void)
         if (true)
           {
             Simulator::Schedule (MicroSeconds (0), &E2Termination::Start, m_e2term);
+            Simulator::Schedule(MicroSeconds(500), &LteEnbNetDevice::BuildAndSendReportMessage, this, E2Termination::RicSubscriptionRequest_rval_s{});
+            // Simulator::Schedule(MicroSeconds(1000), &LteEnbNetDevice::ReadControlFile, this);
           }
         else { // give some time for the simulation to start, TODO check value
           m_cuUpFileName = "cu-up-cell-" + std::to_string(m_cellId) + ".txt";
@@ -680,13 +683,12 @@ LteEnbNetDevice::SetE2Termination(Ptr<E2Termination> e2term)
   m_e2term = e2term;
 
   NS_LOG_DEBUG("Register E2SM");
-
-  if (!m_forceE2FileLogging)
+  if (true)
     {
-      Ptr<KpmFunctionDescription> kpmFd = Create<KpmFunctionDescription> ();
-      e2term->RegisterKpmCallbackToE2Sm (
-          200, kpmFd,
-          std::bind (&LteEnbNetDevice::KpmSubscriptionCallback, this, std::placeholders::_1));
+      // Ptr<KpmFunctionDescription> kpmFd = Create<KpmFunctionDescription> ();
+      // e2term->RegisterKpmCallbackToE2Sm (
+      //     200, kpmFd,
+      //     std::bind (&LteEnbNetDevice::KpmSubscriptionCallback, this, std::placeholders::_1));
 
       Ptr<RicControlFunctionDescription> ricCtrlFd = Create<RicControlFunctionDescription> ();
       e2term->RegisterSmCallbackToE2Sm (300, ricCtrlFd,
@@ -839,14 +841,13 @@ LteEnbNetDevice::BuildRicIndicationMessageCuUp(std::string plmId)
     }
 
   NS_LOG_DEBUG(Simulator::Now().GetSeconds() << " " << std::to_string(m_cellId) << " cell volume " << cellDlTxVolume);
-
   if (m_forceE2FileLogging) {
-    // std::ofstream csv {};
-    // csv.open (m_cuUpFileName.c_str (),  std::ios_base::app);
-    // if (!csv.is_open ())
-    // {
-    //   NS_FATAL_ERROR ("Can't open file " << m_cuUpFileName.c_str ());
-    // }
+    std::ofstream csv {};
+    csv.open (m_cuUpFileName.c_str (),  std::ios_base::app);
+    if (!csv.is_open ())
+    {
+      NS_FATAL_ERROR ("Can't open file " << m_cuUpFileName.c_str ());
+    }
 
     uint64_t timestamp = m_startTime + (uint64_t) Simulator::Now().GetMilliSeconds ();
 
@@ -870,23 +871,10 @@ LteEnbNetDevice::BuildRicIndicationMessageCuUp(std::string plmId)
         std::to_string(0) + "," +
         std::to_string(cellDlTxVolume) + "," +
         uePms + ",,\n";
-      std::string sdl_nmspace = "ns-o-ran";
-      std::unique_ptr<shareddatalayer::SyncStorage> sdl(shareddatalayer::SyncStorage::create());
-      try{
-        DataMap dmap;
-        Key k = m_cuUpFileName + "," + ueImsiComplete;
-        Data d;
-        d.assign(to_print.begin(), to_print.end());
-        dmap.insert({k,d});
-        Namespace ns(sdl_nmspace);
-        sdl->set(ns, dmap);
-      }
-    catch(...){
-      NS_FATAL_ERROR ("Can't write in sdl.");
+
+      csv << to_print;
     }
-      // csv << to_print;
-    }
-    // csv.close();
+    csv.close();
     return nullptr;
     }
   else
@@ -929,12 +917,12 @@ LteEnbNetDevice::BuildRicIndicationMessageCuCp(std::string plmId)
     }
 
   if (m_forceE2FileLogging) {
-    // std::ofstream csv {};
-    // csv.open (m_cuCpFileName.c_str (),  std::ios_base::app);
-    // if (!csv.is_open ())
-    // {
-    //   NS_FATAL_ERROR ("Can't open file " << m_cuCpFileName.c_str ());
-    // }
+    std::ofstream csv {};
+    csv.open (m_cuCpFileName.c_str (),  std::ios_base::app);
+    if (!csv.is_open ())
+    {
+      NS_FATAL_ERROR ("Can't open file " << m_cuCpFileName.c_str ());
+    }
 
     NS_LOG_DEBUG ("m_cuCpFileName open " << m_cuCpFileName);
 
@@ -954,24 +942,11 @@ LteEnbNetDevice::BuildRicIndicationMessageCuCp(std::string plmId)
                              "\n";
 
       NS_LOG_DEBUG(to_print);
-      std::string sdl_nmspace = "ns-o-ran";
-      std::unique_ptr<shareddatalayer::SyncStorage> sdl(shareddatalayer::SyncStorage::create());
-      try{
-        DataMap dmap;
-        Key k = m_cuCpFileName + "," + ueImsiComplete;
-        Data d;
-        d.assign(to_print.begin(), to_print.end());
-        dmap.insert({k,d});
-        Namespace ns(sdl_nmspace);
-        sdl->set(ns, dmap);
-      }
-    catch(...){
-      NS_FATAL_ERROR ("Can't write in sdl.");
-    }
-      // csv << to_print;
+
+      csv << to_print;
     }
 
-    // csv.close ();
+    csv.close ();
     
     return nullptr;
     }

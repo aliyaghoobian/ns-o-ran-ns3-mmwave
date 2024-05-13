@@ -27,7 +27,7 @@ RUN apt-get update && apt-get install -y build-essential git cmake libsctp-dev a
 
 WORKDIR /workspace
 
-RUN git clone -b develop https://github.com/wineslab/ns-o-ran-e2-sim /workspace/e2sim
+RUN git clone -b develop https://github.com/aliyaghoobian/ns-o-ran-e2-sim /workspace/e2sim
 
 RUN mkdir /workspace/e2sim/e2sim/build
 WORKDIR /workspace/e2sim/e2sim/build

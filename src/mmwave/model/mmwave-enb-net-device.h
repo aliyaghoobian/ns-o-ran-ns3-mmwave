@@ -63,7 +63,6 @@ using DataMap = std::map<Key, Data>;
 using Keys = std::set<Key>;
 
 
-
 namespace ns3 {
 /* Add forward declarations here */
 class Packet;
@@ -179,7 +178,7 @@ private:
   std::string m_cuUpFileName;
   std::string m_cuCpFileName;
   std::string m_duFileName;
-  
+
 };
 }
 }
