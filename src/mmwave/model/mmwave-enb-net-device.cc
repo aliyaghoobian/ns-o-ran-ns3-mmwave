@@ -402,75 +402,70 @@ MmWaveEnbNetDevice::UpdateConfig (void)
               Simulator::Schedule(MicroSeconds(500), &MmWaveEnbNetDevice::BuildAndSendReportMessage, this, E2Termination::RicSubscriptionRequest_rval_s{});
 
 
-              // if(!m_forceE2FileLogging) {
-              //   Simulator::Schedule (MicroSeconds (0), &E2Termination::Start, m_e2term);
-              // }
-              // else {
-              //   m_cuUpFileName = "cu-up-cell-" + std::to_string(m_cellId) + ".txt";
-              //   std::ofstream csv {};
-              //   csv.open (m_cuUpFileName.c_str ());
-              //   csv << "timestamp,ueImsiComplete,DRB.PdcpSduDelayDl (cellAverageLatency),"
-              //          "m_pDCPBytesUL (0),"
-              //          "m_pDCPBytesDL (cellDlTxVolume),DRB.PdcpSduVolumeDl_Filter.UEID (txBytes),"
-              //          "Tot.PdcpSduNbrDl.UEID (txDlPackets),DRB.PdcpSduBitRateDl.UEID"
-              //          "(pdcpThroughput),"
-              //          "DRB.PdcpSduDelayDl.UEID (pdcpLatency),QosFlow.PdcpPduVolumeDL_Filter.UEID"
-              //          "(txPdcpPduBytesNrRlc),DRB.PdcpPduNbrDl.Qos.UEID (txPdcpPduNrRlc)\n";
-              //   csv.close ();
+ 
+              m_cuUpFileName_txt = "cu-up-cell-" + std::to_string(m_cellId) + ".txt";
+              std::ofstream csv {};
+              csv.open (m_cuUpFileName_txt.c_str ());
+              csv << "timestamp,ueImsiComplete,DRB.PdcpSduDelayDl (cellAverageLatency),"
+                      "m_pDCPBytesUL (0),"
+                      "m_pDCPBytesDL (cellDlTxVolume),DRB.PdcpSduVolumeDl_Filter.UEID (txBytes),"
+                      "Tot.PdcpSduNbrDl.UEID (txDlPackets),DRB.PdcpSduBitRateDl.UEID"
+                      "(pdcpThroughput),"
+                      "DRB.PdcpSduDelayDl.UEID (pdcpLatency),QosFlow.PdcpPduVolumeDL_Filter.UEID"
+                      "(txPdcpPduBytesNrRlc),DRB.PdcpPduNbrDl.Qos.UEID (txPdcpPduNrRlc)\n";
+              csv.close ();
 
-              //   m_cuCpFileName = "cu-cp-cell-" + std::to_string(m_cellId) + ".txt";
-              //   csv.open (m_cuCpFileName.c_str ());
-              //   csv << "timestamp,ueImsiComplete,numActiveUes,DRB.EstabSucc.5QI.UEID (numDrb),"
-              //          "DRB.RelActNbr.5QI.UEID (0),L3 serving Id(m_cellId),UE (imsi),L3 serving SINR,"
-              //          "L3 serving SINR 3gpp,"
-              //          "L3 neigh Id 1 (cellId),L3 neigh SINR 1,L3 neigh SINR 3gpp 1 (convertedSinr),"
-              //          "L3 neigh Id 2 (cellId),L3 neigh SINR 2,L3 neigh SINR 3gpp 2 (convertedSinr),"
-              //          "L3 neigh Id 3 (cellId),L3 neigh SINR 3,L3 neigh SINR 3gpp 3 (convertedSinr),"
-              //          "L3 neigh Id 4 (cellId),L3 neigh SINR 4,L3 neigh SINR 3gpp 4 (convertedSinr),"
-              //          "L3 neigh Id 5 (cellId),L3 neigh SINR 5,L3 neigh SINR 3gpp 5 (convertedSinr),"
-              //          "L3 neigh Id 6 (cellId),L3 neigh SINR 6,L3 neigh SINR 3gpp 6 (convertedSinr),"
-              //          "L3 neigh Id 7 (cellId),L3 neigh SINR 7,L3 neigh SINR 3gpp 7 (convertedSinr),"
-              //          "L3 neigh Id 8 (cellId),L3 neigh SINR 8,L3 neigh SINR 3gpp 8 (convertedSinr)"
-              //          "\n";
-              //   csv.close();
+              m_cuCpFileName_txt = "cu-cp-cell-" + std::to_string(m_cellId) + ".txt";
+              csv.open (m_cuCpFileName_txt.c_str ());
+              csv << "timestamp,ueImsiComplete,numActiveUes,DRB.EstabSucc.5QI.UEID (numDrb),"
+                      "DRB.RelActNbr.5QI.UEID (0),L3 serving Id(m_cellId),UE (imsi),L3 serving SINR,"
+                      "L3 serving SINR 3gpp,"
+                      "L3 neigh Id 1 (cellId),L3 neigh SINR 1,L3 neigh SINR 3gpp 1 (convertedSinr),"
+                      "L3 neigh Id 2 (cellId),L3 neigh SINR 2,L3 neigh SINR 3gpp 2 (convertedSinr),"
+                      "L3 neigh Id 3 (cellId),L3 neigh SINR 3,L3 neigh SINR 3gpp 3 (convertedSinr),"
+                      "L3 neigh Id 4 (cellId),L3 neigh SINR 4,L3 neigh SINR 3gpp 4 (convertedSinr),"
+                      "L3 neigh Id 5 (cellId),L3 neigh SINR 5,L3 neigh SINR 3gpp 5 (convertedSinr),"
+                      "L3 neigh Id 6 (cellId),L3 neigh SINR 6,L3 neigh SINR 3gpp 6 (convertedSinr),"
+                      "L3 neigh Id 7 (cellId),L3 neigh SINR 7,L3 neigh SINR 3gpp 7 (convertedSinr),"
+                      "L3 neigh Id 8 (cellId),L3 neigh SINR 8,L3 neigh SINR 3gpp 8 (convertedSinr)"
+                      "\n";
+              csv.close();
 
-              //   m_duFileName = "du-cell-" + std::to_string(m_cellId) + ".txt";
-              //   csv.open (m_duFileName.c_str ());
-                
-              //   std::string header_csv =
-              //       "timestamp,ueImsiComplete,plmId,nrCellId,dlAvailablePrbs,"
-              //       "ulAvailablePrbs,qci,dlPrbUsage,ulPrbUsage";
+              m_duFileName_txt = "du-cell-" + std::to_string(m_cellId) + ".txt";
+              csv.open (m_duFileName_txt.c_str ());
+              
+              std::string header_csv =
+                  "timestamp,ueImsiComplete,plmId,nrCellId,dlAvailablePrbs,"
+                  "ulAvailablePrbs,qci,dlPrbUsage,ulPrbUsage";
 
-              //   std::string cell_header =
-              //       "TB.TotNbrDl.1,TB.TotNbrDlInitial,TB.TotNbrDlInitial.Qpsk,"
-              //       "TB.TotNbrDlInitial.16Qam,"
-              //       "TB.TotNbrDlInitial.64Qam,RRU.PrbUsedDl,TB.ErrTotalNbrDl.1,"
-              //       "QosFlow.PdcpPduVolumeDL_Filter,CARR.PDSCHMCSDist.Bin1,"
-              //       "CARR.PDSCHMCSDist.Bin2,"
-              //       "CARR.PDSCHMCSDist.Bin3,CARR.PDSCHMCSDist.Bin4,CARR.PDSCHMCSDist.Bin5,"
-              //       "CARR.PDSCHMCSDist.Bin6,L1M.RS-SINR.Bin34,L1M.RS-SINR.Bin46, "
-              //       "L1M.RS-SINR.Bin58,"
-              //       "L1M.RS-SINR.Bin70,L1M.RS-SINR.Bin82,L1M.RS-SINR.Bin94,L1M.RS-SINR.Bin127,"
-              //       "DRB.BufferSize.Qos,DRB.MeanActiveUeDl";
+              std::string cell_header =
+                  "TB.TotNbrDl.1,TB.TotNbrDlInitial,TB.TotNbrDlInitial.Qpsk,"
+                  "TB.TotNbrDlInitial.16Qam,"
+                  "TB.TotNbrDlInitial.64Qam,RRU.PrbUsedDl,TB.ErrTotalNbrDl.1,"
+                  "QosFlow.PdcpPduVolumeDL_Filter,CARR.PDSCHMCSDist.Bin1,"
+                  "CARR.PDSCHMCSDist.Bin2,"
+                  "CARR.PDSCHMCSDist.Bin3,CARR.PDSCHMCSDist.Bin4,CARR.PDSCHMCSDist.Bin5,"
+                  "CARR.PDSCHMCSDist.Bin6,L1M.RS-SINR.Bin34,L1M.RS-SINR.Bin46, "
+                  "L1M.RS-SINR.Bin58,"
+                  "L1M.RS-SINR.Bin70,L1M.RS-SINR.Bin82,L1M.RS-SINR.Bin94,L1M.RS-SINR.Bin127,"
+                  "DRB.BufferSize.Qos,DRB.MeanActiveUeDl";
 
-              //   std::string ue_header =
-              //       "TB.TotNbrDl.1.UEID,TB.TotNbrDlInitial.UEID,TB.TotNbrDlInitial.Qpsk.UEID,"
-              //       "TB.TotNbrDlInitial.16Qam.UEID,TB.TotNbrDlInitial.64Qam.UEID,"
-              //       "TB.ErrTotalNbrDl.1.UEID,"
-              //       "QosFlow.PdcpPduVolumeDL_Filter.UEID,RRU.PrbUsedDl.UEID,"
-              //       "CARR.PDSCHMCSDist.Bin1.UEID,"
-              //       "CARR.PDSCHMCSDist.Bin2.UEID,CARR.PDSCHMCSDist.Bin3.UEID,"
-              //       "CARR.PDSCHMCSDist.Bin4.UEID,"
-              //       "CARR.PDSCHMCSDist.Bin5.UEID,"
-              //       "CARR.PDSCHMCSDist.Bin6.UEID,L1M.RS-SINR.Bin34.UEID, L1M.RS-SINR.Bin46.UEID,"
-              //       "L1M.RS-SINR.Bin58.UEID,L1M.RS-SINR.Bin70.UEID,L1M.RS-SINR.Bin82.UEID,"
-              //       "L1M.RS-SINR.Bin94.UEID,L1M.RS-SINR.Bin127.UEID,DRB.BufferSize.Qos.UEID,"
-              //       "DRB.UEThpDl.UEID, DRB.UEThpDlPdcpBased.UEID";
+              std::string ue_header =
+                  "TB.TotNbrDl.1.UEID,TB.TotNbrDlInitial.UEID,TB.TotNbrDlInitial.Qpsk.UEID,"
+                  "TB.TotNbrDlInitial.16Qam.UEID,TB.TotNbrDlInitial.64Qam.UEID,"
+                  "TB.ErrTotalNbrDl.1.UEID,"
+                  "QosFlow.PdcpPduVolumeDL_Filter.UEID,RRU.PrbUsedDl.UEID,"
+                  "CARR.PDSCHMCSDist.Bin1.UEID,"
+                  "CARR.PDSCHMCSDist.Bin2.UEID,CARR.PDSCHMCSDist.Bin3.UEID,"
+                  "CARR.PDSCHMCSDist.Bin4.UEID,"
+                  "CARR.PDSCHMCSDist.Bin5.UEID,"
+                  "CARR.PDSCHMCSDist.Bin6.UEID,L1M.RS-SINR.Bin34.UEID, L1M.RS-SINR.Bin46.UEID,"
+                  "L1M.RS-SINR.Bin58.UEID,L1M.RS-SINR.Bin70.UEID,L1M.RS-SINR.Bin82.UEID,"
+                  "L1M.RS-SINR.Bin94.UEID,L1M.RS-SINR.Bin127.UEID,DRB.BufferSize.Qos.UEID,"
+                  "DRB.UEThpDl.UEID, DRB.UEThpDlPdcpBased.UEID";
 
-              //   csv << header_csv + "," + cell_header + "," + ue_header + "\n";
-              //   csv.close();
-              //   Simulator::Schedule(MicroSeconds(500), &MmWaveEnbNetDevice::BuildAndSendReportMessage, this, E2Termination::RicSubscriptionRequest_rval_s{});
-              // }
+              csv << header_csv + "," + cell_header + "," + ue_header + "\n";
+              csv.close();
 
             }
           m_isConfigured = true;
@@ -668,12 +663,12 @@ MmWaveEnbNetDevice::BuildRicIndicationMessageCuUp(std::string plmId)
 
   if (m_forceE2FileLogging)
     {
-      // std::ofstream csv{};
-      // csv.open (m_cuUpFileName.c_str (), std::ios_base::app);
-      // if (!csv.is_open ())
-      //   {
-      //     NS_FATAL_ERROR ("Can't open file " << m_cuUpFileName.c_str ());
-      //   }
+      std::ofstream csv{};
+      csv.open (m_cuUpFileName_txt.c_str (), std::ios_base::app);
+      if (!csv.is_open ())
+        {
+          NS_FATAL_ERROR ("Can't open file " << m_cuUpFileName_txt.c_str ());
+        }
 
       uint64_t timestamp = m_startTime + (uint64_t) Simulator::Now ().GetMilliSeconds ();
 
@@ -709,9 +704,9 @@ MmWaveEnbNetDevice::BuildRicIndicationMessageCuUp(std::string plmId)
             NS_FATAL_ERROR ("Can't write in sdl.");
           }
 
-          // csv << to_print;
+          csv << to_print;
         }
-      // csv.close ();
+      csv.close ();
       return nullptr;
     }
   else
@@ -848,14 +843,14 @@ MmWaveEnbNetDevice::BuildRicIndicationMessageCuCp(std::string plmId)
 
   if (m_forceE2FileLogging)
     {
-      // std::ofstream csv{};
-      // csv.open (m_cuCpFileName.c_str (), std::ios_base::app);
-      // if (!csv.is_open ())
-      //   {
-      //     NS_FATAL_ERROR ("Can't open file " << m_cuCpFileName.c_str ());
-      //   }
+      std::ofstream csv{};
+      csv.open (m_cuCpFileName_txt.c_str (), std::ios_base::app);
+      if (!csv.is_open ())
+        {
+          NS_FATAL_ERROR ("Can't open file " << m_cuCpFileName_txt.c_str ());
+        }
 
-      NS_LOG_DEBUG ("m_cuCpFileName open " << m_cuCpFileName);
+      NS_LOG_DEBUG ("m_cuCpFileName open " << m_cuCpFileName_txt);
 
       // the string is timestamp, ueImsiComplete, numActiveUes, DRB.EstabSucc.5QI.UEID (numDrb), DRB.RelActNbr.5QI.UEID (0), L3 serving Id (m_cellId), UE (imsi), L3 serving SINR, L3 serving SINR 3gpp, L3 neigh Id (cellId), L3 neigh Sinr, L3 neigh SINR 3gpp (convertedSinr)
       // The values for L3 neighbour cells are repeated for each neighbour (7 times in this implementation)
@@ -891,9 +886,9 @@ MmWaveEnbNetDevice::BuildRicIndicationMessageCuCp(std::string plmId)
             NS_FATAL_ERROR ("Can't write in sdl.");
           }
 
-          // csv << to_print;
+          csv << to_print;
         }
-      // csv.close ();
+      csv.close ();
       return nullptr;
     }
   else
@@ -1203,12 +1198,12 @@ MmWaveEnbNetDevice::BuildRicIndicationMessageDu(std::string plmId, uint16_t nrCe
     }
 
   if (m_forceE2FileLogging) {
-    // std::ofstream csv {};
-    // csv.open (m_duFileName.c_str (),  std::ios_base::app);
-    // if (!csv.is_open ())
-    // {
-    //   NS_FATAL_ERROR ("Can't open file " << m_duFileName.c_str ());
-    // }
+    std::ofstream csv {};
+    csv.open (m_duFileName_txt.c_str (),  std::ios_base::app);
+    if (!csv.is_open ())
+    {
+      NS_FATAL_ERROR ("Can't open file " << m_duFileName_txt.c_str ());
+    }
 
     uint64_t timestamp = m_startTime + (uint64_t) Simulator::Now().GetMilliSeconds ();
 
@@ -1291,9 +1286,9 @@ MmWaveEnbNetDevice::BuildRicIndicationMessageDu(std::string plmId, uint16_t nrCe
         NS_FATAL_ERROR ("Can't write in sdl.");
       }
 
-      // csv << to_print;
+      csv << to_print;
     }
-    // csv.close ();
+    csv.close ();
     
     return nullptr;
     }

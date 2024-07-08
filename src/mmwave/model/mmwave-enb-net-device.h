@@ -176,8 +176,13 @@ private:
 
   bool m_forceE2FileLogging; //< if true log PMs to files
   std::string m_cuUpFileName;
+  std::string m_cuUpFileName_txt;
+
   std::string m_cuCpFileName;
+  std::string m_cuCpFileName_txt;
+
   std::string m_duFileName;
+  std::string m_duFileName_txt;
 
 };
 }
