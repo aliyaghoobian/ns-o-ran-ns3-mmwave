@@ -52,13 +52,17 @@ RUN cd sdl && \
     make install
 
 # Install ns-3
-RUN apt-get install -y g++ python3 qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools
+RUN apt-get install -y g++ python3 qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools python3-pip
 
 RUN git clone -b dev https://github.com/aliyaghoobian/ns-o-ran-ns3-mmwave.git /workspace/ns3-mmwave-oran
 # COPY . /workspace/ns3-mmwave-oran
 # RUN git clone -b master https://github.com/o-ran-sc/sim-ns3-o-ran-e2 /workspace/ns3-mmwave-oran/contrib/oran-interface
 
 WORKDIR /workspace/ns3-mmwave-oran
+
+RUN pip3 install statsd joblib numpy watchdog statsd-tags
+RUN pip3 install statsd-telegraf --user
+COPY sim_watcher.py /workspace/ns3-mmwave-oran/
 
 RUN ./waf configure --enable-tests --enable-examples
 RUN ./waf build
